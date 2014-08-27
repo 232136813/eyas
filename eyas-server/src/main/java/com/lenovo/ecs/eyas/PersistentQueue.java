@@ -53,7 +53,7 @@ public class PersistentQueue {
 	private AtomicInteger totalTransactions = new AtomicInteger(0);
 	private AtomicInteger totalCanceledTransactions = new AtomicInteger(0);
 	private TreeMap<Integer, QItem> openTransactions = new TreeMap<Integer, QItem>();
-	private QueueCollection queueCollection;
+//	private QueueCollection queueCollection;
 	private PersistentQueue expireQueue;
 	private Timer timer;
 	private final DeadlineWaitQueue<Waiter> waiters;
@@ -70,7 +70,7 @@ public class PersistentQueue {
 		this.isFanout = name.contains("+");
 		this.journal = new Journal(new File(persistentPath), name, this, journalSyncScheduler, config.getSyncJournal(), packer);
 		this.createTime = System.currentTimeMillis();
-		this.queueCollection = queueCollection;
+//		this.queueCollection = queueCollection;
 		if(config.getExpireToQueue() != null)
 			expireQueue = queueCollection.queue(config.getExpireToQueue(), null);
 
