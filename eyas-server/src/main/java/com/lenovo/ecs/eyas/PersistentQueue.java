@@ -149,14 +149,14 @@ public class PersistentQueue {
 	public final void checkRotateJournal() throws IOException, InterruptedException{
 		
 		if(log.isDebugEnabled()){
-			log.debug("Check Rotate Journal method");
+			log.debug("Check Rotate Journal method jounral.size = " + journal.size() + "; queueLength = "+ queueLength + "; config.defaultJournalSize = " + config.getDefaultJournalSize()
+					+"; config.getMaxMemorySize = " + config.getMaxJournalSize());
 		}
-		
 	    if (queueLength == 0 && journal.size() >= config.getDefaultJournalSize()) {
-	        log.info("Rewriting journal file for '{}' (qsize={})", name, queueSize);
+	        log.info("Rewriting journal file for '{}' (qsize={})", new Object[]{name, queueSize});
 	        journal.rewrite(openTransactions.values(), queue);
 	    } else if (journal.size() >= config.getMaxMemorySize()) {
-	        log.info("Rotating journal file for '{}' (qsize={})", name, queueSize);
+	        log.info("Rotating journal file for '{}' (qsize={})",new Object[]{name, queueSize});
 	        if((journal.size() + journal.getArchivedSize()) >= config.getMaxJournalSize()){ 
 	        	if(journal.isReadBehind()){
 	        		//在fillreadbehind的模式下保存现场，并生成 checkpoint 留待 reader 读取到 checkpoint 位置时 进行 pack操作
