@@ -30,80 +30,79 @@ import com.lenovo.ecs.eyas.thrift.QueueInfo;
 import com.lenovo.ecs.eyas.thrift.Status;
 import com.lenovo.ecs.eyas.thrift.Eyas;
 
-public class EyasThriftHandler extends EyasHandler implements Eyas.Iface{
+public class EyasThriftHandler implements Eyas.Iface{
 
 	private EyasHandler handler;
 	private static final Logger log = LoggerFactory.getLogger(EyasThriftHandler.class);
 	
 	public EyasThriftHandler(QueueCollection queueCollection, Timer timer, Integer maxOpenReads,  ServerStatus serverStatus){
-		this.serverStatus = serverStatus;
 		this.handler = new EyasHandler(queueCollection, timer, maxOpenReads, null, serverStatus);
 	}
 
 	@Override
 	public int put(String queue_name, List<ByteBuffer> items,
 			int expiration_msec) throws TException {
-		return 0;
+		return handler.put(queue_name, items, expiration_msec);
 	}
 
 	@Override
 	public List<Item> get(String queue_name, int max_items, int timeout_msec,
 			int auto_abort_msec) throws TException {
 		// TODO Auto-generated method stub
-		return null;
+		return handler.get(queue_name, max_items, timeout_msec, auto_abort_msec);
 	}
 
 	@Override
-	public int confirm(String queue_name, Set<Integer> ids) throws TException {
+	public int confirm(String queue_name, Set<Integer> xids) throws TException {
 		// TODO Auto-generated method stub
-		return 0;
+		return handler.confirm(queue_name, xids);
 	}
 
 	@Override
-	public int abort(String queue_name, Set<Integer> ids) throws TException {
+	public int abort(String queue_name, Set<Integer> xids) throws TException {
 		// TODO Auto-generated method stub
-		return 0;
+		return handler.abort(queue_name, xids);
 	}
 
 	@Override
 	public QueueInfo peek(String queue_name) throws TException {
 		// TODO Auto-generated method stub
-		return null;
+		return handler.peek(queue_name);
 	}
 
 	@Override
 	public void flush_queue(String queue_name) throws TException {
 		// TODO Auto-generated method stub
-		
+		handler.flush_queue(queue_name);
 	}
 
 	@Override
 	public void flush_all_queues() throws TException {
 		// TODO Auto-generated method stub
-		
+		handler.flush_all_queues();
 	}
 
 	@Override
 	public void delete_queue(String queue_name) throws TException {
 		// TODO Auto-generated method stub
-		
+		handler.delete_queue(queue_name);
 	}
 
 	@Override
 	public Status current_status() throws TException {
 		// TODO Auto-generated method stub
-		return null;
+		return handler.current_status();
 	}
 
 	@Override
 	public void set_status(Status status) throws TException {
 		// TODO Auto-generated method stub
-		
+		handler.set_status(status);
 	}
 
 	@Override
 	public String get_version() throws TException {
-		return null;
+		return handler.get_version();
 	}
 
 

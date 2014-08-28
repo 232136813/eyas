@@ -19,7 +19,7 @@ import com.lenovo.ecs.eyas.client.ClientConfig;
 import com.lenovo.ecs.eyas.thrift.Eyas;
 import com.lenovo.ecs.eyas.thrift.Item;
 
-public class EyasClient {
+public class EyasClient  implements Runnable{
 	TTransport transport;
     Eyas.Client client; 
    
@@ -52,29 +52,42 @@ public class EyasClient {
 		 transport.close();  
 	}
 	
-	public static void main(String[] args)throws Exception{
-		EyasClient client = new EyasClient(ClientConfig.getConfig().getHost(), ClientConfig.getConfig().getPort());
-		long start = System.currentTimeMillis();
-		List<ByteBuffer> l = new ArrayList<ByteBuffer>();
-//		for(int j=0; j<100000; j++){
-////			for(int i=0; i<1;i++){
-//				l.add(ByteBuffer.wrap((j+"").getBytes()));		
-////			}
-//		
-//		}
-//		int i = client.syncAdd("abc", l, 0);
-//		System.out.println(i);
-		for(int i=0;i<100000;i++){
-			List<Item> items = client.syncGet("abc", 1, 1, 0);
-//			System.out.println(new String(items.get(0).getData()));
+	
+	public void run(){
+		for(int i=0;i<10000;i++){
+			try {
+				List<Item> items = syncGet("abc", 1, 1, 0);
+			} catch (TException e) {
+				e.printStackTrace();
+			}
 		}
 		
-		long end = System.currentTimeMillis();
-		System.out.println("time = " + (end -start));
-
-
-	
-
+	}
+	public static void main(String[] args)throws Exception{
+		
+		EyasClient client = new EyasClient(ClientConfig.getConfig().getHost(), ClientConfig.getConfig().getPort());
+		List<ByteBuffer> l = new ArrayList<ByteBuffer>();
+		for(int i=0;i<10000000; i++){
+			ByteBuffer item = ByteBuffer.wrap((i+"").getBytes());
+			l.add(item);
+		}
+		
+		client.syncAdd("abc", l, 0);
+		
+//		Thread[] ts = new Thread[10];
+//		long start = System.currentTimeMillis();
+//		for(int i=0; i<10; i++){
+//			EyasClient client = new EyasClient(ClientConfig.getConfig().getHost(), ClientConfig.getConfig().getPort());
+//			Thread t = new Thread(client);
+//			ts[i] = t;
+//			ts[i].start();
+//		}
+//	
+//		for(int i=0; i<10; i++){
+//			ts[i].join();
+//		}
+//		long end = System.currentTimeMillis();
+//		System.out.println("time = " + (end -start));
 	}
 
 }

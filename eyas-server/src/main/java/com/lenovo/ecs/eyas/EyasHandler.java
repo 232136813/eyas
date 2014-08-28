@@ -107,13 +107,12 @@ public class EyasHandler {
 	}
 	
 	public List<Item> get(final String queue_name, int max_items, int timeout_msec,
-			int auto_abort_msec) throws TException {
+			int auto_abort_msec) {
 		final List<Item> items = new ArrayList<Item>();
 		try {
 			monitorUtil(queue_name, (timeout_msec == 0) ? null : new Date(System.currentTimeMillis()+(long)timeout_msec), max_items, auto_abort_msec > 0, items);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new TException("Service is not available");
 		} 
 		
 		if(auto_abort_msec > 0){
@@ -124,12 +123,7 @@ public class EyasHandler {
 			TimerTask task = new TimerTask(){
 				@Override
 				public void run() {
-					try {
-						abort(queue_name, ids);
-					} catch (TException e) {
-						e.printStackTrace();
-						log.error("abortReads error queue_name = "+ queue_name + "; ids = "+ ids +"; items = " + items); 
-					}
+					abort(queue_name, ids);
 				}
 			};
 			timer.schedule(task, auto_abort_msec);
@@ -137,7 +131,7 @@ public class EyasHandler {
 		return items;
 	}
 
-	public int confirm(String queue_name, Set<Integer> xids) throws TException {
+	public int confirm(String queue_name, Set<Integer> xids) {
 		int count = 0;
 
 		if(xids != null){
@@ -146,7 +140,6 @@ public class EyasHandler {
 				queue = queues.queue(queue_name, false);
 			} catch (Exception e) {
 				e.printStackTrace();
-				throw new TException(e);
 			} 			
 			for(Integer xid : xids)
 			try {	
@@ -156,14 +149,13 @@ public class EyasHandler {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				throw new TException(e);
 			} 
 		}
 		return count;
 	}
 
 
-	public int abort(String queue_name, Set<Integer> xids) throws TException {
+	public int abort(String queue_name, Set<Integer> xids) {
 		int count = 0;
 		if(xids != null){
 			PersistentQueue queue = null;
@@ -171,7 +163,6 @@ public class EyasHandler {
 				queue = queues.queue(queue_name, false);
 			} catch (Exception e) {
 				e.printStackTrace();
-				throw new TException(e);
 			} 			
 			for(Integer xid : xids)
 			try {	
@@ -181,7 +172,6 @@ public class EyasHandler {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				throw new TException(e);
 			} 
 		}
 		return count;
