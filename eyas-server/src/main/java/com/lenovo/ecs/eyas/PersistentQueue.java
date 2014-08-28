@@ -147,6 +147,11 @@ public class PersistentQueue {
 	 * 
 	 */
 	public final void checkRotateJournal() throws IOException, InterruptedException{
+		
+		if(log.isDebugEnabled()){
+			log.debug("Check Rotate Journal");
+		}
+		
 	    if (queueLength == 0 && journal.size() >= config.getDefaultJournalSize()) {
 	        log.info("Rewriting journal file for '{}' (qsize={})", name, queueSize);
 	        journal.rewrite(openTransactions.values(), queue);
@@ -157,13 +162,19 @@ public class PersistentQueue {
 	        		//在fillreadbehind的模式下保存现场，并生成 checkpoint 留待 reader 读取到 checkpoint 位置时 进行 pack操作
 	        		Set<QItem> reservedItems = new HashSet<QItem>();
 	        		reservedItems.addAll(openTransactions.values());
+	        		if(log.isDebugEnabled())
+		        		log.debug("check Rotate Journal (journal.size() + journal.getArchivedSize()) >= config.getMaxJournalSize() and is in read behind rotate" );
 	        	    journal.rotate(reservedItems, true);  
 	        	}else{//否则 所有的有用数据都在内存中 可以直接 rewrite到 新文件中 
 	        		  //删除所有旧文件  
 	        		  //dump数据比较大 有可能会比较慢  ,留待后期优化
+	        		if(log.isDebugEnabled())
+		        		log.debug("check Rotate Journal (journal.size() + journal.getArchivedSize()) >= config.getMaxJournalSize() and  is not in read behind rewrite" );
 	        		journal.rewrite(openTransactions.values(), queue);
 	        	}
 	        }else{
+	        	if(log.isDebugEnabled())
+	        		log.debug("check Rotate Journal (journal.size() + journal.getArchivedSize()) <= config.getMaxJournalSize()  rotate" );
 	    	    journal.rotate(openTransactions.values(), false);
 	        }
 	    }
