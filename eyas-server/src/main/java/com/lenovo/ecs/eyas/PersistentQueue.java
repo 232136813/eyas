@@ -200,7 +200,7 @@ public class PersistentQueue {
 		}
 
 		//fix me
-		while(queueLength > config.getMaxItems() || queueSize >= config.getMaxSize()){
+		while(((config.getMaxItems() != null ) && queueLength > config.getMaxItems().longValue()) || (config.getMaxSize() != null && (queueSize >= config.getMaxSize().longValue()))){
 			if(!config.getDiscardOldWhenFull())return false;
 			_remove(false, null);
 			totalDiscarded.getAndIncrement();
@@ -215,7 +215,7 @@ public class PersistentQueue {
 			logger.debug("add = " + item);
 		if(config.getKeepJournal()){
 			checkRotateJournal();
-			if(!journal.isReadBehind() && (queueSize >= config.getMaxMemorySize())){
+			if(!journal.isReadBehind() && (queueSize >= config.getMaxMemorySize().longValue())){
 				  log.info("Dropping to read-behind for queue '{}' ({})", name, queueSize);
 		          journal.startReadBehind();
 			}
