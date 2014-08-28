@@ -2,7 +2,7 @@
 
 
 <eyas listenAddress="0.0.0.0"  thriftListenPort="2229" queuePath="/var/spool/eyas" clientTimeout="" 
-	maxOpenTransactions="100" expirationTimerFrequency="1.second" defaultJournalSize="16.megabyte" maxMemorySize="128.megabyte" maxJournalSize="1.gigabyte" syncJournal="100.millisecond">
+	maxOpenTransactions="100" expirationTimerFrequency="1.second" defaultJournalSize="16.kilobyte" maxMemorySize="128.kilobyte" maxJournalSize="1.megabyte" syncJournal="100.millisecond">
 
 	<queue name="weatherQueue" maxAge="1800.second" maxItem="150000" />
 	<queue name="abc" maxAge="1800.second" maxItem="100000000" keepJournal="true" />

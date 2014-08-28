@@ -67,27 +67,31 @@ public class EyasClient  implements Runnable{
 		
 		EyasClient client = new EyasClient(ClientConfig.getConfig().getHost(), ClientConfig.getConfig().getPort());
 		List<ByteBuffer> l = new ArrayList<ByteBuffer>();
-		for(int i=0;i<10000000; i++){
+		long start1 = System.currentTimeMillis();
+		for(int i=0;i<1000000; i++){
 			ByteBuffer item = ByteBuffer.wrap((i+"").getBytes());
 			l.add(item);
 		}
-		
+//		
 		client.syncAdd("abc", l, 0);
+		long end1 = System.currentTimeMillis();
 		
-//		Thread[] ts = new Thread[10];
-//		long start = System.currentTimeMillis();
-//		for(int i=0; i<10; i++){
-//			EyasClient client = new EyasClient(ClientConfig.getConfig().getHost(), ClientConfig.getConfig().getPort());
-//			Thread t = new Thread(client);
-//			ts[i] = t;
-//			ts[i].start();
-//		}
-//	
-//		for(int i=0; i<10; i++){
-//			ts[i].join();
-//		}
-//		long end = System.currentTimeMillis();
-//		System.out.println("time = " + (end -start));
+		System.out.println("add time = " + (end1 - start1));
+		int m=10;
+		Thread[] ts = new Thread[m];
+		long start = System.currentTimeMillis();
+		for(int i=0; i<m; i++){
+			EyasClient clientx = new EyasClient(ClientConfig.getConfig().getHost(), ClientConfig.getConfig().getPort());
+			Thread t = new Thread(clientx);
+			ts[i] = t;
+			ts[i].start();
+		}
+	
+		for(int i=0; i<m; i++){
+			ts[i].join();
+		}
+		long end = System.currentTimeMillis();
+		System.out.println("remove time = " + (end -start));
 	}
 
 }
