@@ -66,9 +66,7 @@ public class QueueConfigBuilder {
 		}
 		if(maxMemorySize != null){
 			config.setMaxMemorySize(StorageUnit.getStorageInBytes(maxMemorySize));
-			System.out.println(name +" maxMemorySize = " +config.getMaxMemorySize() + "; " + StorageUnit.getStorageInBytes(maxMemorySize));
 		}else{
-			System.out.println(name + " maxMemorySize2 = " +config.getMaxMemorySize() + "; " + EyasConfigLoader.getInstance().getEyasConfig().getMaxMemorySize());
 			if(EyasConfigLoader.getInstance().getEyasConfig().getMaxMemorySize() != null){
 				config.setMaxMemorySize(EyasConfigLoader.getInstance().getEyasConfig().getMaxMemorySize());
 			}else{
