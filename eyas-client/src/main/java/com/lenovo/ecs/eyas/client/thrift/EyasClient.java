@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
@@ -39,26 +40,38 @@ public class EyasClient {
 		return client.put(queue_name, items, expiration_msec);
 	}
 	
+	public int syncConfirm(String queue_name, Set<Integer> ids) throws TException{
+		return client.confirm(queue_name, ids);
+	}
+	
+	public int syncAbort(String queue_name, Set<Integer> ids) throws TException{
+		return client.abort(queue_name, ids);
+	}
+	
 	public void close(){
 		 transport.close();  
 	}
 	
 	public static void main(String[] args)throws Exception{
 		EyasClient client = new EyasClient(ClientConfig.getConfig().getHost(), ClientConfig.getConfig().getPort());
-	
-//		for(int j=0; j<100; j++){
-//			List<ByteBuffer> l = new ArrayList<ByteBuffer>();
-//			for(int i=0; i<5000;i++){
-//				l.add(ByteBuffer.wrap((i+"").getBytes()));		
-//			}
-//			int i = client.syncAdd("abc", l, 0);
-//			System.out.println(i);
+		long start = System.currentTimeMillis();
+		List<ByteBuffer> l = new ArrayList<ByteBuffer>();
+//		for(int j=0; j<100000; j++){
+////			for(int i=0; i<1;i++){
+//				l.add(ByteBuffer.wrap((j+"").getBytes()));		
+////			}
+//		
 //		}
-
-		for(int i=0;i<100;i++){
+//		int i = client.syncAdd("abc", l, 0);
+//		System.out.println(i);
+		for(int i=0;i<100000;i++){
 			List<Item> items = client.syncGet("abc", 1, 1, 0);
-			System.out.println(new String(items.get(0).getData()));
+//			System.out.println(new String(items.get(0).getData()));
 		}
+		
+		long end = System.currentTimeMillis();
+		System.out.println("time = " + (end -start));
+
 
 	
 

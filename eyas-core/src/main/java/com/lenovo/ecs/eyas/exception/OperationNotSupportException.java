@@ -1,5 +1,5 @@
 package com.lenovo.ecs.eyas.exception;
 
-public class OperationNotSupportException extends Exception{
+public class OperationNotSupportException extends RuntimeException{
 
 }

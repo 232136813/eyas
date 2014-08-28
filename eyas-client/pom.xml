@@ -6,8 +6,9 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>eyas-client</artifactId>
-  
-  
+    <properties>
+  <main.class>com.lenovo.ecs.eyas.client.thrift.EyasClient</main.class>
+  </properties>
   <dependencies>
   		<dependency>  
 			<groupId>com.lenovo.ecs.eyas</groupId>  
