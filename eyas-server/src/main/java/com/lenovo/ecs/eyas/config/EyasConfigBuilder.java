@@ -46,6 +46,7 @@ public class EyasConfigBuilder {
 		config.setDefaultJournalSize(StorageUnit.getStorageInBytes(defaultJournalSize));
 		config.setMaxJournalSize(StorageUnit.getStorageInBytes(maxJournalSize));
 		config.setSyncJournal(TimeUnitExt.getTimeInMillSec(clientTimeOut));
+		config.setMaxMemorySize(StorageUnit.getStorageInBytes(maxMemorySize));
 		return config;
 	}
 	

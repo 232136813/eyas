@@ -38,10 +38,10 @@ public class PersistentQueue {
 	private volatile QueueConfig config;
 	private Deque<QItem> queue = new ArrayDeque<QItem>();
 	private boolean isFanout = false;
-	private Long queueSize = 0L;
-	private Long currentAge = 0L;
-	private Long queueLength = 0L;
-	private Long memoryBytes = 0L;
+	private long queueSize = 0L;
+	private long currentAge = 0L;
+	private long queueLength = 0L;
+	private long memoryBytes = 0L;
 	private boolean closed = false;
 	private boolean paused = false;
 	private Journal journal = null;
@@ -99,7 +99,7 @@ public class PersistentQueue {
 	}
 	
 	public synchronized long maxMemoryBytes(){
-		return config.getMaxMemorySize();
+		return config.getMaxMemorySize().longValue();
 	}
 	public synchronized long journalSize(){
 		return journal.size();
@@ -150,14 +150,17 @@ public class PersistentQueue {
 		
 		if(log.isDebugEnabled()){
 			log.debug("Check Rotate Journal method jounral.size = " + journal.size() + "; queueLength = "+ queueLength + "; config.defaultJournalSize = " + config.getDefaultJournalSize()
-					+"; config.getMaxMemorySize = " + config.getMaxJournalSize());
+					+"; config.getMaxMemorySize = " + config.getMaxMemorySize()
+					);
 		}
-	    if (queueLength == 0 && journal.size() >= config.getDefaultJournalSize()) {
-	        log.info("Rewriting journal file for '{}' (qsize={})", new Object[]{name, queueSize});
+	    if (queueLength == 0 && journal.size() >= config.getDefaultJournalSize().longValue()) {
+	    	if(log.isDebugEnabled())
+	    		log.debug("Rewriting journal file for '{}' (qsize={})", new Object[]{name, queueSize});
 	        journal.rewrite(openTransactions.values(), queue);
-	    } else if (journal.size() >= config.getMaxMemorySize()) {
-	        log.info("Rotating journal file for '{}' (qsize={})",new Object[]{name, queueSize});
-	        if((journal.size() + journal.getArchivedSize()) >= config.getMaxJournalSize()){ 
+	    } else if (journal.size() >= config.getMaxMemorySize().longValue()) {
+	    	if(log.isDebugEnabled())
+	    		log.debug("Rotating journal file for '{}' (qsize={})",new Object[]{name, queueSize});
+	        if((journal.size() + journal.getArchivedSize()) >= config.getMaxJournalSize().longValue()){ 
 	        	if(journal.isReadBehind()){
 	        		//在fillreadbehind的模式下保存现场，并生成 checkpoint 留待 reader 读取到 checkpoint 位置时 进行 pack操作
 	        		Set<QItem> reservedItems = new HashSet<QItem>();
