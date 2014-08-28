@@ -9,7 +9,7 @@
 
 APP_NAME="eyas-server"
 ADMIN_PORT="8082"
-VERSION="${version}"
+VERSION="0.0.1-SNAPSHOT"
 APP_HOME="./libs"
 INITIAL_SLEEP=15
 

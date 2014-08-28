@@ -149,7 +149,7 @@ public class PersistentQueue {
 	public final void checkRotateJournal() throws IOException, InterruptedException{
 		
 		if(log.isDebugEnabled()){
-			log.debug("Check Rotate Journal");
+			log.debug("Check Rotate Journal method");
 		}
 		
 	    if (queueLength == 0 && journal.size() >= config.getDefaultJournalSize()) {
